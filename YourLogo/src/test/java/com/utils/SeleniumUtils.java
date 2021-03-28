@@ -1,7 +1,9 @@
 package com.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
@@ -13,7 +15,7 @@ import com.reports.ReportsFiles;
 
 public class SeleniumUtils {
 
-	static ReportsFiles reports = new ReportsFiles();
+	static ReportsFiles reports;
 
 	public void EnterUrl(WebDriver driver, String url) {
 		try {
@@ -25,9 +27,29 @@ public class SeleniumUtils {
 			reports.fail();
 		}
 	}
+	
+	public Properties getProperty() throws IOException
+	{
+		FileInputStream inputStream=null;
+        Properties properties = new Properties();
+        try {        	 
+            properties.load(new FileInputStream(".resources/YourLogo.properties"));
+         
+        } catch (Exception e) {
+            System.out.println("Exception: " + e);
+       } 
+         return properties;
+	}
+	
+	public void startSetup(String TCNAME) {
+		reports = new ReportsFiles(TCNAME);
+	}
 
 	public void endRun(WebDriver driver) {
 		driver.quit();
+		
+	}
+	public void endsuite() {
 		reports.reportFlush();
 	}
 

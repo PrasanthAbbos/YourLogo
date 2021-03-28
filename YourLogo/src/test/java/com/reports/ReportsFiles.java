@@ -1,22 +1,37 @@
 package com.reports;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.utils.SeleniumUtils;
 
 public class ReportsFiles {
 	
-	static ExtentSparkReporter spark = new ExtentSparkReporter("./target/extentReports/result.html");
+	static SeleniumUtils  util = new SeleniumUtils();
+	
+	static Properties prop;
+	
+	static ExtentSparkReporter spark;
 
 	static ExtentReports extent = new ExtentReports();
 	static ExtentTest logger;
 	
 
-	public ReportsFiles() {
+	public ReportsFiles(String TCName) {	
+		try {
+			prop = util.getProperty();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		spark = new ExtentSparkReporter(prop.getProperty("extentreportpath"));
 		extent.attachReporter(spark);
-		logger = extent.createTest("YourLogo");
+		logger = extent.createTest(TCName);
 	}
 	
 	public static void pass(String file) {
